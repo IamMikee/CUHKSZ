@@ -9,11 +9,14 @@ symbolarr = ["+", "-", "*", "/"]
 print(f"Welcome to the math game! Current highscore: {highscore}")
 
 def askanswer():
-    ans = float(input(">>> "))
-    if type(ans) != type(float(1)):
+    ans = float(1)
+    try:
+        ans = float(input(">>> "))
+    except:
         print("Invalid input.")
         askanswer()
-    return ans
+    finally:
+        return ans
 
 def checkans(answer):
     global score, diff, highscore
@@ -29,7 +32,7 @@ def checkans(answer):
             highscore = score
         print(f"NEW HIGHSCORE! Highscore: {highscore}")
         retry = input("Do you want to play again? (Y/N): ")
-        if retry == "y" or "Y" or "YES" or "yes" or "Yes":
+        if retry == "y":
             print(f'Current highscore: {highscore}')
             score = 0
             run()
