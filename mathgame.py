@@ -8,6 +8,13 @@ diff = 1
 symbolarr = ["+", "-", "*", "/"]
 print(f"Welcome to the math game! Current highscore: {highscore}")
 
+def askanswer():
+    ans = float(input(">>> "))
+    if type(ans) != type(float(1)):
+        print("Invalid input.")
+        askanswer()
+    return ans
+
 def checkans(answer):
     global score, diff, highscore
     if answer:
@@ -26,13 +33,15 @@ def checkans(answer):
             print(f'Current highscore: {highscore}')
             score = 0
             run()
+        else:
+            exit()
         
 
 def run():
     randomsymbol = random.randint(0,2)
     number1, number2 = random.randint(10*diff-9,10*diff), random.randint(10*diff-9,10*diff)
     print(f"What is {number1} {symbolarr[randomsymbol]} {number2}?")
-    ans = float(input(">>> "))
+    ans = askanswer()
     checkans(ans == eval(str(number1) + symbolarr[randomsymbol] + str(number2)))
     
 run()
