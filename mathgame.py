@@ -9,14 +9,18 @@ symbolarr = ["+", "-", "*", "/"]
 print(f"Welcome to the math game! Current highscore: {highscore}")
 
 def askanswer():
-    ans = float(1)
+    ans = ""
     try:
         ans = float(input(">>> "))
     except:
-        print("Invalid input.")
-        askanswer()
-    finally:
+        ""
+    print(type(ans), type(1), type(float(1)))
+    if type(ans) == type(float(1)):
+        # print("the answer is: ", ans)
         return ans
+    else:
+        print("Invalid input.")
+        return askanswer()
 
 def checkans(answer):
     global score, diff, highscore
@@ -45,6 +49,7 @@ def run():
     number1, number2 = random.randint(10*diff-9,10*diff), random.randint(10*diff-9,10*diff)
     print(f"What is {number1} {symbolarr[randomsymbol]} {number2}?")
     ans = askanswer()
-    checkans(ans == eval(str(number1) + symbolarr[randomsymbol] + str(number2)))
+    # print(ans)
+    checkans(ans == float(eval(str(number1) + symbolarr[randomsymbol] + str(number2))))
     
 run()
