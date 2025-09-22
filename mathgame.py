@@ -14,7 +14,7 @@ def askanswer():
         ans = float(input(">>> "))
     except:
         ""
-    print(type(ans), type(1), type(float(1)))
+    # print(type(ans), type(1), type(float(1)))
     if type(ans) == type(float(1)):
         # print("the answer is: ", ans)
         return ans
