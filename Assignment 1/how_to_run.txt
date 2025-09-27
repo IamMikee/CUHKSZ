@@ -1,0 +1,3 @@
+For Q1-Q4, simply run the code and enter the prompted input; to exit the code, simply type "end".
+
+For Q5-Q6, no input prompt is provided, directly call the function in the code.
