@@ -4,12 +4,12 @@ Matrix = List[List[float]]  # Define Matrix
 
 class Matrix3x3:
     """
-    A class representing a 3Ã—3 matrix with basic arithmetic operations.
+    A class representing a 3×3 matrix with basic arithmetic operations.
 
     Attributes
     ----------
     matrix : List[List[float]]
-        A 3Ã—3 matrix stored as a list of three lists, each containing three floats.
+        A 3×3 matrix stored as a list of three lists, each containing three floats.
     """
 
     def __init__(self,) -> None:
@@ -19,21 +19,22 @@ class Matrix3x3:
         # self.matrix = Matrix
         self.matrix = [[0,0,0],[0,0,0],[0,0,0]]
 
+
     def add(self, a: Matrix, b: Matrix) -> Matrix:
         """
-        Add two 3Ã—3 matrices element-wise.
+        Add two 3×3 matrices element-wise.
         Parameters
         ----------
         a : Matrix
-            A 3Ã—3 matrix represented as a list of three lists of floats.
+            A 3×3 matrix represented as a list of three lists of floats.
         b : Matrix
-            Another 3Ã—3 matrix.
+            Another 3×3 matrix.
         Returns
         -------
         Matrix
-            A new 3Ã—3 matrix representing element-wise sum of a and b.
+            A new 3×3 matrix representing element-wise sum of a and b.
         """
-        # TODO: Implement matrix 
+        # TODO: Implement matrix addition
         for i in range(3):
             for j in range(3):
                 self.matrix[i][j] = a[i][j] + b[i][j]
@@ -42,7 +43,7 @@ class Matrix3x3:
 
     def subtract(self, a: Matrix, b: Matrix) -> Matrix:
         """
-        Subtract one 3Ã—3 matrix from another (a - b).
+        Subtract one 3×3 matrix from another (a - b).
         Parameters
         ----------
         a : Matrix
@@ -51,7 +52,7 @@ class Matrix3x3:
         Returns
         -------
         Matrix
-            A new 3Ã—3 matrix representing (a - b).
+            A new 3×3 matrix representing (a - b).
         """
         # TODO: Implement matrix subtraction
         for i in range(3):
@@ -62,7 +63,7 @@ class Matrix3x3:
 
     def multiply(self, a: Matrix, b: Matrix) -> Matrix:
         """
-        Multiply two 3Ã—3 matrices using standard matrix multiplication.
+        Multiply two 3×3 matrices using standard matrix multiplication.
         Parameters
         ----------
         a : Matrix
@@ -71,7 +72,7 @@ class Matrix3x3:
         Returns
         -------
         Matrix
-            The resulting 3Ã—3 matrix product.
+            The resulting 3×3 matrix product.
         """
         # TODO: Implement matrix multiplication
         for i in range(3):
@@ -85,7 +86,7 @@ class Matrix3x3:
 
     def transpose(self, a: Matrix) -> Matrix:
         """
-        Compute the transpose of a 3Ã—3 matrix.
+        Compute the transpose of a 3×3 matrix.
 
         Parameters
         ----------
@@ -94,7 +95,7 @@ class Matrix3x3:
         Returns
         -------
         Matrix
-            The 3Ã—3 transpose of matrix a.
+            The 3×3 transpose of matrix a.
         """
         # TODO: implement matrix transpose
         for i in range(3):
@@ -127,7 +128,26 @@ def evaluate_expression(expression: str) -> int:
     - No multiplication or division
     """
     # TODO: Implement expression evaluator using stack or recursion
-    
+
+
+
+
+def quick_sort(arr: List[int]) -> List[int]:
+    """
+    Perform quick-sort on a list of integers while tracking all comparisons.
+    Parameters
+    ----------
+    arr : List[int]
+        The input list.
+    Returns
+    -------
+    sorted_arr : List[int]
+        Sorted version of arr.
+    """
+    # TODO: implement quick-sort with:
+    #   - partitioning
+    #   - recursive sorting
+    #   - tracking (count, sequence)
 
 
 
@@ -166,3 +186,18 @@ if __name__ == '__main__':
           f"              matrix subtract: {q1_sub == sol1.subtract(A, B)}\n"
           f"              matrix multiply:{q1_mul == sol1.multiply(A, B)}\n"
           f"              matrix transpose: {q1_trans == sol1.transpose(A)}\n")
+
+
+
+
+    # print("=== Q2 Testing ===")
+    # expressions = "7-(4-(1+2))"
+    # q2_ans = evaluate_expression(expressions)
+    # print(f"Q2 Answer is {q2_ans == 6}")
+    #
+    #
+    # print("=== Q3 Testing ===")
+    # arr = [5, 3, 8, 4, 2, 7]
+    # q3_ans = quick_sort(arr)
+    # ans = [2, 3, 4, 5, 7, 8]
+    # print(f"Q3 Answer is {q3_ans == ans}")
