@@ -172,57 +172,19 @@ def quick_sort(arr: List[int]) -> List[int]:
     #   - partitioning
     #   - recursive sorting
     #   - tracking (count, sequence)
+    if len(arr) <= 1:
+        return arr
 
+    pivot = arr[0]
+    less, more = [], []
 
+    for num in arr[1:]:
+        if num <= pivot:
+            less.append(num)
+        else:
+            more.append(num)
 
+    less = quick_sort(less)
+    more = quick_sort(more)
 
-if __name__ == '__main__':
-    print("--- Test it yourself ---")
-
-    print("=== Q1 Testing ===")
-    A = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ]
-
-    B = [
-        [9, 8, 7],
-        [6, 5, 4],
-        [3, 2, 1]
-    ]
-    sol1 = Matrix3x3()
-    q1_add = [[10, 10, 10, ],
-               [10, 10, 10, ],
-               [10, 10, 10, ]]
-    q1_sub = [[-8, -6, -4, ],
-               [-2, 0, 2, ],
-               [4, 6, 8, ]]
-    q1_mul = [[30, 24, 18, ],
-               [84, 69, 54, ],
-               [138, 114, 90, ]]
-
-    # Matrix A transpose
-    q1_trans = [[1, 4, 7, ],
-                 [2, 5, 8, ],
-                 [3, 6, 9, ]]
-    # print(f"Q1 Answer is: matrix add: {q1_add == sol1.add(A, B)}\n"
-    #       f"              matrix subtract: {q1_sub == sol1.subtract(A, B)}\n"
-    #       f"              matrix multiply:{q1_mul == sol1.multiply(A, B)}\n"
-    #       f"              matrix transpose: {q1_trans == sol1.transpose(A)}\n")
-
-
-
-
-    print("=== Q2 Testing ===")
-    expressions = "(1-(2-(3))) + 4"
-    q2_ans = evaluate_expression(expressions)
-    # print(f"Q2 Answer is {q2_ans}")
-    # print(f"Q2 Answer is {q2_ans == 6}")
-    #
-    #
-    # print("=== Q3 Testing ===")
-    # arr = [5, 3, 8, 4, 2, 7]
-    # q3_ans = quick_sort(arr)
-    # ans = [2, 3, 4, 5, 7, 8]
-    # print(f"Q3 Answer is {q3_ans == ans}")
+    return less+[pivot]+more
