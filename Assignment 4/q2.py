@@ -116,9 +116,9 @@ class TextEditor:
         """
         # TODO part
         # ------- Your code start here -------
-
-
-
+        self.undo_stack.push(("type", text))
+        self.document += text
+        self.redo_stack.clear()
         # ------- End of your code -----------
 
     def delete(self, n):
@@ -137,9 +137,15 @@ class TextEditor:
         """
         # TODO part
         # ------- Your code start here -------
+        if n > len(self.document):
+            self.undo_stack.push(("delete", self.document))
+            self.document = ""
+        else:
+            deleted_text = self.document[len(self.document)-n:]
+            self.undo_stack.push(("delete", deleted_text))
+            self.document = self.document.replace(deleted_text, "")
 
-
-
+        self.redo_stack.clear()
         # ------- End of your code -----------
 
     def undo(self):
@@ -159,9 +165,17 @@ class TextEditor:
         """
         # TODO part
         # ------- Your code start here -------
-
-
-
+        if self.undo_stack.is_empty():
+            return self.document
+        else:
+            op = self.undo_stack.pop()
+            if op[0] == "type":
+                self.document = self.document.replace(op[1], "")
+                self.redo_stack.push(("delete", op[1]))
+            elif op[0] == "delete":
+                self.document += op[1]
+                self.redo_stack.push(("type", op[1]))
+            return self.document
         # ------- End of your code -----------
 
     def redo(self):
@@ -179,7 +193,17 @@ class TextEditor:
         """
         # TODO part
         # ------- Your code start here -------
-
+        if self.redo_stack.is_empty():
+            return self.document
+        else:
+            op = self.redo_stack.pop()
+            if op[0] == "type":
+                self.document = self.document.replace(op[1], "")
+                self.undo_stack.push(("delete", op[1]))
+            elif op[0] == "delete":
+                self.document += op[1]
+                self.undo_stack.push(("type", op[1]))
+            return self.document
 
 
         # ------- End of your code -----------
