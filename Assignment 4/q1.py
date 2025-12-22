@@ -81,9 +81,14 @@ def has_cycle(head):
     """
     # TODO part
     # ------- Your code start here -------
+    fast = slow = head
 
-
-
+    while fast is not None and fast.next is not None:
+        fast = fast.next.next
+        slow = slow.next
+        if fast == slow:
+            return True
+    return False
     # ------- End of your code -----------
 
 
@@ -108,9 +113,18 @@ def find_cycle_start(head):
     """
     # TODO part
     # ------- Your code start here -------
+    fast = slow = head
 
-
-
+    while fast is not None and fast.next is not None:
+        fast = fast.next.next
+        slow = slow.next
+        if fast == slow:
+            fast = head
+            while fast != slow:
+                slow = slow.next
+                fast = fast.next
+            return slow
+    return None
     # ------- End of your code -----------
 
 
