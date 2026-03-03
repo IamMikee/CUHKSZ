@@ -33,7 +33,7 @@ def moveto_next_word(text, position):
     return position + next_word.start() if next_word else len(text) - 1
 
 def moveto_previous_word(text, position):
-    if position == 0 or not text: return 0 #if text is empty and position already 0
+    if position == 0 or not text: return 0
 
     prev_words_pos = [word.start() for word in re.finditer(r"\b\w", text[:position])]
     return prev_words_pos[-1] if prev_words_pos else 0
@@ -82,68 +82,74 @@ def print_content(text, position, cursor_on):
 
 
 while True:
-    try:
-        prompt = input(">")
+    prompt = input(">")
 
-        if len(prompt) != 1 and prompt[0] not in ["i", "a", "I", "A"]: #failsafe for extra whitespaces
+    if not prompt:
+        continue
+
+    if len(prompt) != 1 and prompt[0] not in ["i", "a", "I", "A"]:
+        continue
+
+    if len(prompt) == 1 and prompt[0] in ["i", "a", "I", "A"]: #invalid parameters for i,a,I,A
+        continue
+
+
+    match prompt[0]:
+        case "?":
+            print(help_text)
             continue
 
-        match prompt[0]:
-            case "?":
-                print(help_text)
-                continue
+        case ".":
+            cursor_active = not cursor_active
 
-            case ".":
-                cursor_active = not cursor_active
+        case "h":
+            if cursor_pos != 0:
+                cursor_pos -= 1
 
-            case "h":
-                if cursor_pos != 0:
-                    cursor_pos -= 1
+        case "l":
+            if cursor_pos != len(content) - 1:
+                cursor_pos += 1
 
-            case "l":
-                if cursor_pos != len(content) - 1:
-                    cursor_pos += 1
+        case "^":
+            cursor_pos = 0
 
-            case "^":
-                cursor_pos = 0
+        case "$":
+            cursor_pos = max(0, len(content) - 1)
 
-            case "$":
-                cursor_pos = max(0, len(content) - 1)
+        case "w":
+            cursor_pos = moveto_next_word(content, cursor_pos)
 
-            case "w":
-                cursor_pos = moveto_next_word(content, cursor_pos)
+        case "b":
+            cursor_pos = moveto_previous_word(content, cursor_pos)
 
-            case "b":
-                cursor_pos = moveto_previous_word(content, cursor_pos)
+        case "e":
+            cursor_pos = moveto_end_of_word(content, cursor_pos)
 
-            case "e":
-                cursor_pos = moveto_end_of_word(content, cursor_pos)
+        case "i":
+            content = insert_before_cursor(content, cursor_pos, prompt[1:])
 
-            case "i":
-                content = insert_before_cursor(content, cursor_pos, prompt[1:])
+        case "a":
+            content, cursor_pos = append_after_cursor(content, cursor_pos, prompt[1:])
 
-            case "a":
-                content, cursor_pos = append_after_cursor(content, cursor_pos, prompt[1:])
+        case "I":
+            content, cursor_pos = insert_at_beginning(content, prompt[1:])
 
-            case "I":
-                content, cursor_pos = insert_at_beginning(content, prompt[1:])
+        case "A":
+            content, cursor_pos = append_at_end(content, prompt[1:])
 
-            case "A":
-                content, cursor_pos = append_at_end(content, prompt[1:])
+        case "x":
+            content, cursor_pos = delete_on_cursor(content, cursor_pos)
 
-            case "x":
-                content, cursor_pos = delete_on_cursor(content, cursor_pos)
+        case "X":
+            content, cursor_pos = delete_before_cursor(content, cursor_pos)
 
-            case "X":
-                content, cursor_pos = delete_before_cursor(content, cursor_pos)
+        case "v":
+            pass
 
-            case "v":
-                pass
+        case "q":
+            break
 
-            case "q":
-                break
+        case _:
+            continue
 
-        print_content(content, cursor_pos, cursor_active)
-
-    except Exception:
-        continue
+    print_content(content, cursor_pos, cursor_active)
