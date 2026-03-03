@@ -50,7 +50,7 @@ def insert_before_cursor(text, position, new_text):
     return text[:position] + new_text + text[position:]
 
 def append_after_cursor(text, position, new_text):
-    if position == 0 and not text: return new_text, len(new_text) - 1
+    if not text: return new_text, len(new_text) - 1
     return text[:position + 1] + new_text + text[position + 1:], position + len(new_text)
 
 def insert_at_beginning(text, new_text):
@@ -63,7 +63,7 @@ def append_at_end(text, new_text):
 
 def delete_on_cursor(text, position):
     if not text: return "", 0
-    if len(text) - 1 == position: return text[:position], position - 1
+    if len(text) - 1 == position: return text[:position], max(0, position - 1)
     return text[:position] + text[position + 1:], position
 
 def delete_before_cursor(text, position):
@@ -108,7 +108,7 @@ while True:
                 cursor_pos = 0
 
             case "$":
-                cursor_pos = len(content) - 1
+                cursor_pos = max(0, len(content) - 1)
 
             case "w":
                 cursor_pos = moveto_next_word(content, cursor_pos)
@@ -145,5 +145,5 @@ while True:
 
         print_content(content, cursor_pos, cursor_active)
 
-    except:
+    except Exception:
         continue
