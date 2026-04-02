@@ -29,6 +29,20 @@ q - quit program"""
 
 
 
+def get_word_bounds(text, position):
+    if not text or position < 0 or position >= len(text): return None
+    left = right = position
+    is_alphanumeric = True if text[position].isalnum() else False
+
+    while left > 0 and text[left - 1].isalnum() == is_alphanumeric:
+        left -= 1
+    while right < len(text) - 1 and text[right + 1].isalnum() == is_alphanumeric:
+        right += 1
+
+    return left, right
+
+
+
 def moveto_next_word(text, position):
     if position + 1 >= len(text) or not text: return position
 
@@ -80,19 +94,60 @@ def delete_before_cursor(text, position):
     return text[:position - 1] + text[position:], position - 1
 
 def delete_next_word(text, current_position, next_word_pos):
-    """
-        TODO:
-        CHECK AGAIN TO CHATGPT
-    """
     if not text: return "", 0
-    if text[next_word_pos:]: return text[:current_position] + text[next_word_pos + 1:], current_position - 1
-    else: return text[:current_position], current_position - 1
+    if next_word_pos >= len(text) - 1: return text[:current_position], current_position
+    else: return text[:current_position] + text[next_word_pos:], current_position
 
 def delete_end_word(text, current_position, end_word_pos):
     if not text: return "", 0
-    prev_text = text[:current_position]
-    if text[end_word_pos + 1:]: return prev_text + text[end_word_pos + 1:], current_position
-    else: return prev_text, len(prev_text) + 1
+    if end_word_pos >= len(text) - 1: return text[:current_position], current_position
+    else: return text[:current_position] + text[end_word_pos + 1], current_position
+
+def delete_prev_word(text, current_position, prev_word_pos):
+    if not text: return "", 0
+    if current_position <= prev_word_pos: return text, prev_word_pos
+    else: return text[:prev_word_pos] + text[current_position + 1:], prev_word_pos
+
+def delete_at_cursor(text, position):
+    if not text: return "", 0
+
+    start_of_word, end_of_word = get_word_bounds(text, position)
+    new_text = text[:start_of_word] + text[end_of_word + 1:]
+    deleted_len = end_of_word - start_of_word + 1
+
+    if position > end_of_word: position -= deleted_len
+    elif start_of_word <= position <= end_of_word: position = start_of_word
+    return new_text, max(0, min(position, len(new_text) - 1))
+
+
+
+def swap_next_word(text, position):
+    if not (bounds := get_word_bounds(text, position)): return text, position
+    left1, right1 = bounds
+
+    next_pos = right1 + 1
+    while next_pos < len(text) and not text[next_pos].isalnum():
+        next_pos += 1
+
+    if not (next_word := get_word_bounds(text, next_pos)): return text, position
+    left2, right2 = next_word
+
+    new_text = text[:left1] + text[left2:right2 + 1] + text[right1 + 1:left2] + text[left1:right1 + 1] + text[right2 + 1:]
+    return new_text, position + (right2 - right1)
+
+def swap_prev_word(text, position):
+    if not (bounds := get_word_bounds(text, position)): return text, position
+    left1, right1 = bounds
+
+    prev_pos = left1 - 1
+    while prev_pos >= 0 and not text[prev_pos].isalnum():
+        prev_pos -= 1
+
+    if not (prev_word := get_word_bounds(text, prev_pos)): return text, position
+    left2, right2 = prev_word
+
+    new_text = text[:left2] + text[left1:right1 + 1] + text[right2 + 1:left1] + text[left2:right2 + 1] + text[right1 + 1:]
+    return new_text, left2 + (position - left1)
 
 
 
@@ -172,16 +227,22 @@ while True:
             content, cursor_pos = delete_end_word(content, cursor_pos, moveto_end_of_word(content, cursor_pos))
 
         case "db":
-            pass
+            content, cursor_pos = delete_prev_word(content, cursor_pos, moveto_previous_word(content, cursor_pos))
 
         case "dc":
-            pass
+            content, cursor_pos = delete_at_cursor(content, cursor_pos)
 
         case "sw":
-            pass
+            if content[cursor_pos].isalnum():
+                content, cursor_pos = swap_next_word(content, cursor_pos)
+            else:
+                pass
 
         case "sb":
-            pass
+            if content[cursor_pos].isalnum():
+                content, cursor_pos = swap_prev_word(content, cursor_pos)
+            else:
+                pass
 
         case "v":
             pass
