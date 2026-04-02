@@ -133,7 +133,7 @@ def swap_next_word(text, position):
     left2, right2 = next_word
 
     new_text = text[:left1] + text[left2:right2 + 1] + text[right1 + 1:left2] + text[left1:right1 + 1] + text[right2 + 1:]
-    return new_text, position + (right2 - right1)
+    return new_text, left2 + (position - left1)
 
 def swap_prev_word(text, position):
     if not (bounds := get_word_bounds(text, position)): return text, position
@@ -233,13 +233,13 @@ while True:
             content, cursor_pos = delete_at_cursor(content, cursor_pos)
 
         case "sw":
-            if content[cursor_pos].isalnum():
+            if 0 <= cursor_pos < len(content) and content[cursor_pos].isalnum():
                 content, cursor_pos = swap_next_word(content, cursor_pos)
             else:
                 pass
 
         case "sb":
-            if content[cursor_pos].isalnum():
+            if 0 <= cursor_pos < len(content) and content[cursor_pos].isalnum():
                 content, cursor_pos = swap_prev_word(content, cursor_pos)
             else:
                 pass
@@ -254,5 +254,5 @@ while True:
             if prompt[0] not in insert_cmds:
                 continue
 
-
+    cursor_pos = max(0, min(cursor_pos, len(content) - 1)) #prevent position from going out of bounds
     print_content(content, cursor_pos, cursor_active)
